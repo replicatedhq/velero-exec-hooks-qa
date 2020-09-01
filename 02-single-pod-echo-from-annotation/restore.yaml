@@ -1,0 +1,29 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-02-l4dr
+  namespace: velero
+spec:
+  backupName: backup-02-l4dr
+  includedNamespaces:
+  - '*'
+  includedResources:
+  - '*'
+  excludedResources:
+  - storageclasses.storage.k8s.io
+  includeClusterResources: null
+  hooks:
+    resources:
+    - name: my-hook
+      includedNamespaces:
+      - '*'
+      includedResources:
+      - 'pods'
+      postHooks:
+      # this should be ignored - only the annotation hook should run
+      - exec:
+          container: pod
+          command:
+          - /bin/bash
+          - '-c'
+          - 'echo goodbye > /world.txt'

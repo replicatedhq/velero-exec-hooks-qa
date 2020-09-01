@@ -1,0 +1,34 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-07-fg5l
+  namespace: velero
+spec:
+  backupName: backup-07-fg5l
+  includedNamespaces:
+  - '*'
+  includedResources:
+  - '*'
+  excludedResources:
+  - storageclasses.storage.k8s.io
+  includeClusterResources: null
+  hooks:
+    resources:
+    - name: my-hook
+      includedNamespaces:
+      - '*'
+      includedResources:
+      - 'pods'
+      postHooks:
+      - exec:
+          container: postgres
+          command:
+          - /bin/bash
+          - '-c'
+          - 'while ! pg_isready; do sleep 1; done'
+      - exec:
+          container: postgres
+          command:
+          - /bin/bash
+          - '-c'
+          - 'psql -U velero < /backup/backup.sql'

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: fast
+ namespace: restore
+spec:
+ containers:
+ - name: container1
+   image: debian:buster-slim
+   command: ["/bin/bash", "-c", "sleep infinity"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+ name: slow
+ namespace: restore
+spec:
+ initContainers:
+ - name: init1
+   image: debian:buster-slim
+   command: ["/bin/bash", "-c", "sleep 15"]
+ containers:
+ - name: container1
+   image: debian:buster-slim
+   command: ["/bin/bash", "-c", "sleep infinity"]

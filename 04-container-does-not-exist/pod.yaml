@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: pod
+ namespace: restore
+spec:
+ containers:
+ - name: container1
+   image: debian:buster-slim
+   command: ["/bin/bash", "-c", "sleep infinity"]

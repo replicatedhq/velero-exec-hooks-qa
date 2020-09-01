@@ -1,0 +1,46 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-06-uuue
+  namespace: velero
+spec:
+  backupName: backup-06-uuue
+  includedNamespaces:
+  - '*'
+  includedResources:
+  - '*'
+  excludedResources:
+  - storageclasses.storage.k8s.io
+  includeClusterResources: null
+  hooks:
+    resources:
+    - name: hook1
+      includedNamespaces:
+      - '*'
+      includedResources:
+      - 'pods'
+      labelSelector:
+        matchLabels:
+          app: pod1
+      postHooks:
+      - exec:
+          container: container1
+          command:
+          - /bin/bash
+          - '-c'
+          - 'echo hook1 > /hook.txt'
+    - name: hook2
+      includedNamespaces:
+      - '*'
+      includedResources:
+      - 'pods'
+      labelSelector:
+        matchLabels:
+          app: pod2
+      postHooks:
+      - exec:
+          container: container1
+          command:
+          - /bin/bash
+          - '-c'
+          - 'echo hook2 > /hook.txt'

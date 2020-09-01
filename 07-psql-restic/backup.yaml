@@ -1,0 +1,21 @@
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: backup-07-fg5l
+  namespace: velero
+spec:
+  includedNamespaces:
+  - restore
+  hooks:
+    resources:
+    - name: psql-hook
+      includedNamespaces:
+      - '*'
+      includedResources:
+      - 'pods'
+      pre:
+      - exec:
+          command:
+          - /bin/bash
+          - "-c"
+          - "pg_dump -U velero > /backup/backup.sql"

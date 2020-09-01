@@ -1,0 +1,33 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-08-wgzx
+  namespace: velero
+spec:
+  backupName: backup-08-wgzx
+  includedNamespaces:
+  - '*'
+  includedResources:
+  - '*'
+  excludedResources:
+  - storageclasses.storage.k8s.io
+  includeClusterResources: null
+  hooks:
+    resources:
+    - name: my-hook
+      includedNamespaces:
+      - '*'
+      includedResources:
+      - 'pods'
+      postHooks:
+      - exec:
+          container: pod
+          command:
+          - /bin/false
+          onError: Fail
+      - exec:
+          container: pod
+          command:
+          - /bin/bash
+          - '-c'
+          - 'echo hello > /world.txt'

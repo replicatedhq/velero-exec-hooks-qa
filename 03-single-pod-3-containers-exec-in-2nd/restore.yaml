@@ -1,0 +1,28 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-03-vgae
+  namespace: velero
+spec:
+  backupName: backup-03-vgae
+  includedNamespaces:
+  - '*'
+  includedResources:
+  - '*'
+  excludedResources:
+  - storageclasses.storage.k8s.io
+  includeClusterResources: null
+  hooks:
+    resources:
+    - name: my-hook
+      includedNamespaces:
+      - '*'
+      includedResources:
+      - 'pods'
+      postHooks:
+      - exec:
+          container: container2
+          command:
+          - /bin/bash
+          - '-c'
+          - 'echo hello3 > /world.txt'

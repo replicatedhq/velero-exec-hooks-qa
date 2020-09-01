@@ -1,0 +1,28 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-05-414t
+  namespace: velero
+spec:
+  backupName: backup-05-414t
+  includedNamespaces:
+  - '*'
+  includedResources:
+  - '*'
+  excludedResources:
+  - storageclasses.storage.k8s.io
+  includeClusterResources: null
+  hooks:
+    resources:
+    - name: my-hook
+      includedNamespaces:
+      - '*'
+      includedResources:
+      - 'pods'
+      postHooks:
+      - exec:
+          container: container1
+          command:
+          - /bin/bash
+          - '-c'
+          - 'date +%s > /time.txt'
